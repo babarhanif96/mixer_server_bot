@@ -22,7 +22,7 @@ app.use(morgan('dev'));
 app.use(express.json()); // Parse JSON bodies
 app.use(cors({
     credentials: true,
-    origin: ['http://localhost:5173' , 'https://mixcer.vercel.app', 'https://mixer-frontend-pi.vercel.app', 'http://anon-swap.com']
+    origin: '*'
 }));
 
 
