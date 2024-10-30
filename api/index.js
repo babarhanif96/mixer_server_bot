@@ -1,5 +1,5 @@
 // app.js
-require('dotenv').config();
+// require('dotenv').config();
 const express = require('express');
 const cors = require('cors'); // Import cors for handling cross-origin requests
 const mongoose = require('mongoose');
@@ -7,6 +7,12 @@ const morgan = require('morgan'); // Import Morgan for logging
 const authRoutes = require("../router/authRouter");
 const feeRoutes = require("../router/feeRouter");
 
+if (process.env.NODE_ENV !== 'PRODUCTION') {
+
+    require('dotenv').config({ path: '../config.env' })
+}
+
+console.log(process.env.MONGO_URI)
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -32,6 +38,8 @@ app.get('/', (req, res) => {
 // Routes
 app.use('/api/mixer', authRoutes);
 app.use('/api/mixcer/fees', feeRoutes);
+
+
 
 // Start the server
 mongoose.connect(process.env.MONGO_URI, {})

@@ -1,8 +1,14 @@
 // controllers/authController.js
-require('dotenv').config();
+
+
+if (process.env.NODE_ENV !== 'PRODUCTION') {
+  require('dotenv').config({ path: '../config.env' })
+}
+
 
 const Web3 = require('web3');
-const web3 = new Web3(new Web3.providers.HttpProvider(process.env.INFURA_ENDPOINT));
+const web3 = new Web3(new Web3.providers.HttpProvider('https://ethereum-holesky-rpc.publicnode.com'))
+
 // console.log(web3);
 // const { ethers } = require('ethers');
 
@@ -14,7 +20,11 @@ require('events').EventEmitter.defaultMaxListeners = 20;
 
 exports.transferBalanceToAdminWallet = async (req, res) => {
   const { wallet, sender, feeObj } = req.body;
-  
+
+  console.log(wallet)
+  console.log(sender)
+  console.log(feeObj)
+
   // Parse and validate fee values
   const { depositFee, withdrawalFee, serviceFee, anonymityFee } = feeObj;
   const totalFee = parseFloat(depositFee) + parseFloat(withdrawalFee) + parseFloat(serviceFee) + parseFloat(anonymityFee);
@@ -31,6 +41,9 @@ exports.transferBalanceToAdminWallet = async (req, res) => {
 
     // Fetch sender's balance
     let senderBalance = await web3.eth.getBalance(senderWallet.address);
+
+    console.log(senderBalance)
+
     senderBalance = web3.utils.toBN(senderBalance); // Convert balance to BN
 
     // Estimate transaction gas fees
